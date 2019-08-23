@@ -3,18 +3,11 @@ import axios from 'axios';
 
 const UpdateForm = (props) => {
   console.log(props);
-  const [movie, setMovie] = useState(null);
-
-  const fetchMovie = id => {
-    axios
-      .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => setMovie(res.data))
-      .catch(err => console.log(err.response));
-  };
+  const [movie, setMovie] = useState(props.movie);
 
   useEffect(() => {
-    fetchMovie(props.match.params.id);
-  }, [props.match.params.id]);
+    setMovie(props.movie);
+  }, [props.movie]);
 
   const handleChange = e => setMovie({...movie, [e.target.name]: e.target.value});
 
@@ -29,6 +22,8 @@ const UpdateForm = (props) => {
     axios.put(`http://localhost:5000/api/movies/${movie.id}`, movie)
       .then(res => {
         console.log(res);
+        props.updateMovie(res.data);
+        // props.getMovies();
         props.history.push('/');
       })
       .catch(err => console.log(err.response));
